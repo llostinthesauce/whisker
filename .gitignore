@@ -1,0 +1,25 @@
+.build/
+DerivedData/
+.swiftpm/
+.DS_Store
+__MACOSX/
+*.xcuserstate
+xcuserdata/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+Archive.zip
+*.zip
+server/.venv/
+server/.env
+__pycache__/
+**/__pycache__/
+server/__pycache__/
+server/**/__pycache__/
+server/.pytest_cache/
+
+# Internal / dev-process files kept local-only (out of the public repo)
+NEXT_STEPS.md
+CONTRIBUTING.md
+Tests/
+docs/*.md
+docs/superpowers/

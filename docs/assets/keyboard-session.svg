@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Whisker keyboard preview</title>
+  <desc id="desc">A native-looking iPhone keyboard frame with a Whisker dictate key and session status.</desc>
+  <rect width="900" height="620" fill="#f2f4f7"/>
+  <rect x="180" y="92" width="540" height="408" rx="36" fill="#ffffff" stroke="#d6dce2"/>
+  <rect x="218" y="132" width="464" height="116" rx="18" fill="#f7f9fb" stroke="#e2e7ec"/>
+  <text x="240" y="178" font-family="Arial, sans-serif" font-size="18" fill="#2b3740">Messages</text>
+  <rect x="240" y="198" width="330" height="28" rx="14" fill="#e8eef3"/>
+  <rect x="180" y="330" width="540" height="170" rx="28" fill="#d1d6de"/>
+  <rect x="214" y="365" width="72" height="50" rx="10" fill="#f8f9fb" stroke="#bbc3ca"/>
+  <text x="250" y="397" text-anchor="middle" font-family="Arial, sans-serif" font-size="23" fill="#17212b">globe</text>
+  <rect x="324" y="360" width="252" height="58" rx="14" fill="#f8f9fb" stroke="#bbc3ca"/>
+  <text x="450" y="397" text-anchor="middle" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#047aab">dictate</text>
+  <text x="450" y="455" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#2d8a57">keyboard session ready</text>
+</svg>

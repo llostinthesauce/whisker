@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  verify:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install server dependencies
+        run: python3 -m pip install -r server/requirements.txt
+
+      - name: Python compile
+        run: python3 -m py_compile server/config.py server/app.py server/status.py scripts/whisker_asr_bakeoff.py
+
+      - name: Python tests
+        run: python3 -m unittest discover server/tests
+
+      - name: Swift tests
+        run: swift test
+
+      - name: iOS build
+        run: xcodebuild -project Whisker.xcodeproj -scheme Whisker -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO
+
+      - name: Private reference guard
+        run: bash scripts/private_reference_scan.sh

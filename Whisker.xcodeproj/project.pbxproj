@@ -1,0 +1,782 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A00000000000000000000011 /* DictationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000010 /* DictationApp.swift */; };
+		A00000000000000000000013 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000012 /* RootView.swift */; };
+		A00000000000000000000015 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000014 /* AppState.swift */; };
+		A00000000000000000000021 /* RecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000020 /* RecorderView.swift */; };
+		A00000000000000000000023 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000022 /* AudioRecorder.swift */; };
+		A00000000000000000000025 /* RecordingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000024 /* RecordingSession.swift */; };
+		A00000000000000000000027 /* RecordingLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000026 /* RecordingLimits.swift */; };
+		A000000000000000000000ED /* RecordingSegmenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000EC /* RecordingSegmenter.swift */; };
+		A00000000000000000000031 /* TranscriptionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000030 /* TranscriptionEngine.swift */; };
+		A00000000000000000000033 /* TranscriptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000032 /* TranscriptionViewModel.swift */; };
+		A00000000000000000000041 /* CleanupMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000040 /* CleanupMode.swift */; };
+		A00000000000000000000043 /* CleanupPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000042 /* CleanupPipeline.swift */; };
+		A00000000000000000000045 /* RuleBasedCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000044 /* RuleBasedCleaner.swift */; };
+		A00000000000000000000049 /* DictationProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000048 /* DictationProcessor.swift */; };
+		A0000000000000000000004D /* RemoteMacModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000004C /* RemoteMacModels.swift */; };
+		A0000000000000000000004F /* RemoteMacClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000004E /* RemoteMacClient.swift */; };
+		A00000000000000000000053 /* RemoteMacProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000052 /* RemoteMacProcessor.swift */; };
+		A00000000000000000000055 /* RemoteMacSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000054 /* RemoteMacSettings.swift */; };
+		A000000000000000000000E9 /* SegmentBoundaryDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000E8 /* SegmentBoundaryDetector.swift */; };
+		A000000000000000000000EB /* StreamingDictationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000EA /* StreamingDictationSession.swift */; };
+		A00000000000000000000051 /* ClipboardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000050 /* ClipboardService.swift */; };
+		A00000000000000000000061 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000060 /* SettingsView.swift */; };
+		A00000000000000000000063 /* ModelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000062 /* ModelSettings.swift */; };
+		A00000000000000000000065 /* PrivacySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000064 /* PrivacySettings.swift */; };
+		A00000000000000000000067 /* PermissionsOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000066 /* PermissionsOnboardingView.swift */; };
+		A00000000000000000000071 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000070 /* Transcript.swift */; };
+		A00000000000000000000073 /* DictationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000072 /* DictationResult.swift */; };
+		A00000000000000000000075 /* AudioSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000074 /* AudioSegment.swift */; };
+		A00000000000000000000081 /* PermissionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000080 /* PermissionsService.swift */; };
+		A00000000000000000000083 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000082 /* HistoryStore.swift */; };
+		A00000000000000000000085 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000084 /* Logger.swift */; };
+		A00000000000000000000087 /* WhiskerTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000086 /* WhiskerTheme.swift */; };
+		A000000000000000000000D1 /* HandoffResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D0 /* HandoffResult.swift */; };
+		A000000000000000000000D3 /* HandoffService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D2 /* HandoffService.swift */; };
+		A000000000000000000000D5 /* HandoffConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D4 /* HandoffConstants.swift */; };
+		A000000000000000000000D7 /* HandoffCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D6 /* HandoffCommand.swift */; };
+		A000000000000000000000D9 /* HandoffLaunchAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D8 /* HandoffLaunchAction.swift */; };
+		A000000000000000000000DB /* KeyboardSessionDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000DA /* KeyboardSessionDefaults.swift */; };
+		A000000000000000000000DD /* KeyboardTranscriptRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000DC /* KeyboardTranscriptRecovery.swift */; };
+		A000000000000000000000DF /* HandoffSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000DE /* HandoffSignal.swift */; };
+		A000000000000000000000F1 /* KeyboardLiveTranscriptInserter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000F0 /* KeyboardLiveTranscriptInserter.swift */; };
+		A00000000000000000000091 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000090 /* Assets.xcassets */; };
+		A00000000000000000000093 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000092 /* PrivacyInfo.xcprivacy */; };
+		A000000000000000000000E1 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000E0 /* KeyboardViewController.swift */; };
+		A000000000000000000000E2 /* HandoffResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D0 /* HandoffResult.swift */; };
+		A000000000000000000000E3 /* HandoffService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D2 /* HandoffService.swift */; };
+		A000000000000000000000E4 /* HandoffConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D4 /* HandoffConstants.swift */; };
+		A000000000000000000000E5 /* HandoffCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000D6 /* HandoffCommand.swift */; };
+		A000000000000000000000E6 /* KeyboardTranscriptRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000DC /* KeyboardTranscriptRecovery.swift */; };
+		A000000000000000000000E7 /* HandoffSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000DE /* HandoffSignal.swift */; };
+		A000000000000000000000F2 /* KeyboardLiveTranscriptInserter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000000000000000000000F0 /* KeyboardLiveTranscriptInserter.swift */; };
+		A000000000000000000000CB /* WhiskerKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A000000000000000000000C7 /* WhiskerKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A0000000000000000000000E /* Whisker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whisker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A000000000000000000000C7 /* WhiskerKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WhiskerKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000000000000000000010 /* DictationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationApp.swift; sourceTree = "<group>"; };
+		A00000000000000000000012 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A00000000000000000000014 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A00000000000000000000020 /* RecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderView.swift; sourceTree = "<group>"; };
+		A00000000000000000000022 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		A00000000000000000000024 /* RecordingSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSession.swift; sourceTree = "<group>"; };
+		A00000000000000000000026 /* RecordingLimits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingLimits.swift; sourceTree = "<group>"; };
+		A000000000000000000000EC /* RecordingSegmenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmenter.swift; sourceTree = "<group>"; };
+		A00000000000000000000030 /* TranscriptionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionEngine.swift; sourceTree = "<group>"; };
+		A00000000000000000000032 /* TranscriptionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionViewModel.swift; sourceTree = "<group>"; };
+		A00000000000000000000040 /* CleanupMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupMode.swift; sourceTree = "<group>"; };
+		A00000000000000000000042 /* CleanupPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupPipeline.swift; sourceTree = "<group>"; };
+		A00000000000000000000044 /* RuleBasedCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleBasedCleaner.swift; sourceTree = "<group>"; };
+		A00000000000000000000048 /* DictationProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationProcessor.swift; sourceTree = "<group>"; };
+		A0000000000000000000004C /* RemoteMacModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMacModels.swift; sourceTree = "<group>"; };
+		A0000000000000000000004E /* RemoteMacClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMacClient.swift; sourceTree = "<group>"; };
+		A00000000000000000000052 /* RemoteMacProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMacProcessor.swift; sourceTree = "<group>"; };
+		A00000000000000000000054 /* RemoteMacSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMacSettings.swift; sourceTree = "<group>"; };
+		A000000000000000000000E8 /* SegmentBoundaryDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentBoundaryDetector.swift; sourceTree = "<group>"; };
+		A000000000000000000000EA /* StreamingDictationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingDictationSession.swift; sourceTree = "<group>"; };
+		A00000000000000000000050 /* ClipboardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardService.swift; sourceTree = "<group>"; };
+		A00000000000000000000060 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A00000000000000000000062 /* ModelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSettings.swift; sourceTree = "<group>"; };
+		A00000000000000000000064 /* PrivacySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettings.swift; sourceTree = "<group>"; };
+		A00000000000000000000066 /* PermissionsOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsOnboardingView.swift; sourceTree = "<group>"; };
+		A00000000000000000000070 /* Transcript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcript.swift; sourceTree = "<group>"; };
+		A00000000000000000000072 /* DictationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationResult.swift; sourceTree = "<group>"; };
+		A00000000000000000000074 /* AudioSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSegment.swift; sourceTree = "<group>"; };
+		A00000000000000000000080 /* PermissionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsService.swift; sourceTree = "<group>"; };
+		A00000000000000000000082 /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
+		A00000000000000000000084 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		A00000000000000000000086 /* WhiskerTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhiskerTheme.swift; sourceTree = "<group>"; };
+		A000000000000000000000D0 /* HandoffResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffResult.swift; sourceTree = "<group>"; };
+		A000000000000000000000D2 /* HandoffService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffService.swift; sourceTree = "<group>"; };
+		A000000000000000000000D4 /* HandoffConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffConstants.swift; sourceTree = "<group>"; };
+		A000000000000000000000D6 /* HandoffCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffCommand.swift; sourceTree = "<group>"; };
+		A000000000000000000000D8 /* HandoffLaunchAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffLaunchAction.swift; sourceTree = "<group>"; };
+		A000000000000000000000DA /* KeyboardSessionDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSessionDefaults.swift; sourceTree = "<group>"; };
+		A000000000000000000000DC /* KeyboardTranscriptRecovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTranscriptRecovery.swift; sourceTree = "<group>"; };
+		A000000000000000000000DE /* HandoffSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffSignal.swift; sourceTree = "<group>"; };
+		A000000000000000000000F0 /* KeyboardLiveTranscriptInserter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLiveTranscriptInserter.swift; sourceTree = "<group>"; };
+		A00000000000000000000090 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A00000000000000000000092 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A000000000000000000000E0 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		A000000000000000000000CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A000000000000000000000CC /* WhiskerKeyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = WhiskerKeyboard.entitlements; sourceTree = "<group>"; };
+		A000000000000000000000CD /* Whisker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Whisker.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A0000000000000000000000D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A000000000000000000000C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A000000000000000000000C8 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A000000000000000000000CB /* WhiskerKeyboard.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		A000000000000000000000CA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A000000000000000000000C0;
+			remoteInfo = WhiskerKeyboard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		A000000000000000000000C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A000000000000000000000C0 /* WhiskerKeyboard */;
+			targetProxy = A000000000000000000000CA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXGroup section */
+		A00000000000000000000002 = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000100,
+				A00000000000000000000101,
+				A00000000000000000000003,
+			);
+			sourceTree = "<group>";
+		};
+		A00000000000000000000100 /* Whisker */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000010,
+				A00000000000000000000012,
+				A00000000000000000000014,
+				A0000000000000000000A000,
+				A0000000000000000000A008,
+				A0000000000000000000A00D,
+				A000000000000000000000CD,
+			);
+			name = Whisker;
+			path = Whisker;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000101 /* WhiskerKeyboard */ = {
+			isa = PBXGroup;
+			children = (
+				A000000000000000000000E0,
+				A000000000000000000000CE,
+				A000000000000000000000CC,
+			);
+			name = WhiskerKeyboard;
+			path = WhiskerKeyboard;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A0000000000000000000000E,
+				A000000000000000000000C7,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A000 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A0000000000000000000A001,
+				A0000000000000000000A002,
+				A0000000000000000000A003,
+				A0000000000000000000A004,
+				A0000000000000000000A005,
+				A0000000000000000000A006,
+				A0000000000000000000A007,
+			);
+			name = Features;
+			path = Features;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A001 /* Recorder */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000020,
+				A00000000000000000000022,
+				A00000000000000000000024,
+				A00000000000000000000026,
+				A000000000000000000000EC,
+			);
+			name = Recorder;
+			path = Recorder;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A002 /* Transcription */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000030,
+				A00000000000000000000032,
+			);
+			name = Transcription;
+			path = Transcription;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A003 /* Cleanup */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000040,
+				A00000000000000000000042,
+				A00000000000000000000044,
+			);
+			name = Cleanup;
+			path = Cleanup;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A004 /* Processing */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000048,
+			);
+			name = Processing;
+			path = Processing;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A005 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				A0000000000000000000004C,
+				A0000000000000000000004E,
+				A00000000000000000000052,
+				A00000000000000000000054,
+				A000000000000000000000E8,
+				A000000000000000000000EA,
+			);
+			name = Remote;
+			path = Remote;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A006 /* Clipboard */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000050,
+			);
+			name = Clipboard;
+			path = Clipboard;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A007 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000060,
+				A00000000000000000000062,
+				A00000000000000000000064,
+				A00000000000000000000066,
+			);
+			name = Settings;
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A008 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A0000000000000000000A009,
+				A0000000000000000000A00A,
+				A0000000000000000000A00B,
+				A0000000000000000000A00C,
+			);
+			name = Shared;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A009 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000070,
+				A00000000000000000000072,
+				A00000000000000000000074,
+			);
+			name = Models;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A00A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000080,
+				A00000000000000000000082,
+				A00000000000000000000084,
+			);
+			name = Services;
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A00B /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000086,
+			);
+			name = UI;
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A00C /* Handoff */ = {
+			isa = PBXGroup;
+			children = (
+				A000000000000000000000D0,
+				A000000000000000000000D2,
+				A000000000000000000000D4,
+				A000000000000000000000D6,
+				A000000000000000000000D8,
+				A000000000000000000000DA,
+				A000000000000000000000DC,
+				A000000000000000000000DE,
+				A000000000000000000000F0,
+			);
+			name = Handoff;
+			path = Handoff;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A00D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000090,
+				A00000000000000000000092,
+			);
+			name = Resources;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A00000000000000000000004 /* Whisker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A00000000000000000000006 /* Build configuration list for PBXNativeTarget "Whisker" */;
+			buildPhases = (
+				A0000000000000000000000B /* Sources */,
+				A0000000000000000000000D /* Frameworks */,
+				A0000000000000000000000C /* Resources */,
+				A000000000000000000000C8 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A000000000000000000000C9 /* PBXTargetDependency */,
+			);
+			name = Whisker;
+			packageProductDependencies = (
+			);
+			productName = Whisker;
+			productReference = A0000000000000000000000E /* Whisker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A000000000000000000000C0 /* WhiskerKeyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A000000000000000000000C1 /* Build configuration list for PBXNativeTarget "WhiskerKeyboard" */;
+			buildPhases = (
+				A000000000000000000000C4 /* Sources */,
+				A000000000000000000000C5 /* Frameworks */,
+				A000000000000000000000C6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WhiskerKeyboard;
+			productName = WhiskerKeyboard;
+			productReference = A000000000000000000000C7 /* WhiskerKeyboard.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 2650;
+			};
+			buildConfigurationList = A00000000000000000000005 /* Build configuration list for PBXProject "Whisker" */;
+			compatibilityVersion = "Xcode 26.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A00000000000000000000002;
+			packageReferences = (
+			);
+			productRefGroup = A00000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A00000000000000000000004 /* Whisker */,
+				A000000000000000000000C0 /* WhiskerKeyboard */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A0000000000000000000000C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000091 /* Assets.xcassets in Resources */,
+				A00000000000000000000093 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A0000000000000000000000B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000011 /* DictationApp.swift in Sources */,
+				A00000000000000000000013 /* RootView.swift in Sources */,
+				A00000000000000000000015 /* AppState.swift in Sources */,
+				A00000000000000000000021 /* RecorderView.swift in Sources */,
+				A00000000000000000000023 /* AudioRecorder.swift in Sources */,
+				A00000000000000000000025 /* RecordingSession.swift in Sources */,
+				A00000000000000000000027 /* RecordingLimits.swift in Sources */,
+				A000000000000000000000ED /* RecordingSegmenter.swift in Sources */,
+				A00000000000000000000031 /* TranscriptionEngine.swift in Sources */,
+				A00000000000000000000033 /* TranscriptionViewModel.swift in Sources */,
+				A00000000000000000000041 /* CleanupMode.swift in Sources */,
+				A00000000000000000000043 /* CleanupPipeline.swift in Sources */,
+				A00000000000000000000045 /* RuleBasedCleaner.swift in Sources */,
+				A00000000000000000000049 /* DictationProcessor.swift in Sources */,
+				A0000000000000000000004D /* RemoteMacModels.swift in Sources */,
+				A0000000000000000000004F /* RemoteMacClient.swift in Sources */,
+				A00000000000000000000053 /* RemoteMacProcessor.swift in Sources */,
+				A00000000000000000000055 /* RemoteMacSettings.swift in Sources */,
+				A000000000000000000000E9 /* SegmentBoundaryDetector.swift in Sources */,
+				A000000000000000000000EB /* StreamingDictationSession.swift in Sources */,
+				A00000000000000000000051 /* ClipboardService.swift in Sources */,
+				A00000000000000000000061 /* SettingsView.swift in Sources */,
+				A00000000000000000000063 /* ModelSettings.swift in Sources */,
+				A00000000000000000000065 /* PrivacySettings.swift in Sources */,
+				A00000000000000000000067 /* PermissionsOnboardingView.swift in Sources */,
+				A00000000000000000000071 /* Transcript.swift in Sources */,
+				A00000000000000000000073 /* DictationResult.swift in Sources */,
+				A00000000000000000000075 /* AudioSegment.swift in Sources */,
+				A00000000000000000000081 /* PermissionsService.swift in Sources */,
+				A00000000000000000000083 /* HistoryStore.swift in Sources */,
+				A00000000000000000000085 /* Logger.swift in Sources */,
+				A00000000000000000000087 /* WhiskerTheme.swift in Sources */,
+				A000000000000000000000D1 /* HandoffResult.swift in Sources */,
+				A000000000000000000000D3 /* HandoffService.swift in Sources */,
+				A000000000000000000000D5 /* HandoffConstants.swift in Sources */,
+				A000000000000000000000D7 /* HandoffCommand.swift in Sources */,
+				A000000000000000000000D9 /* HandoffLaunchAction.swift in Sources */,
+				A000000000000000000000DB /* KeyboardSessionDefaults.swift in Sources */,
+				A000000000000000000000DD /* KeyboardTranscriptRecovery.swift in Sources */,
+				A000000000000000000000DF /* HandoffSignal.swift in Sources */,
+				A000000000000000000000F1 /* KeyboardLiveTranscriptInserter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A000000000000000000000C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A000000000000000000000E1 /* KeyboardViewController.swift in Sources */,
+				A000000000000000000000E2 /* HandoffResult.swift in Sources */,
+				A000000000000000000000E3 /* HandoffService.swift in Sources */,
+				A000000000000000000000E4 /* HandoffConstants.swift in Sources */,
+				A000000000000000000000E5 /* HandoffCommand.swift in Sources */,
+				A000000000000000000000E6 /* KeyboardTranscriptRecovery.swift in Sources */,
+				A000000000000000000000E7 /* HandoffSignal.swift in Sources */,
+				A000000000000000000000F2 /* KeyboardLiveTranscriptInserter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section (extension) */
+		A000000000000000000000C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* Begin XCBuildConfiguration section */
+		A00000000000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A00000000000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A00000000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Whisker/Whisker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "Whisker/Resources/Assets.xcassets";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Whisker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "whisker";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "whisker records temporary audio on this iPhone and sends it to your configured transcription server.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = app.whisker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Debug;
+		};
+		A0000000000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Whisker/Whisker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "Whisker/Resources/Assets.xcassets";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Whisker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "whisker";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "whisker records temporary audio on this iPhone and sends it to your configured transcription server.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = app.whisker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Release;
+		};
+		A000000000000000000000C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WhiskerKeyboard/WhiskerKeyboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WhiskerKeyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "whisker";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = app.whisker.Keyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Debug;
+		};
+		A000000000000000000000C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WhiskerKeyboard/WhiskerKeyboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WhiskerKeyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "whisker";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = app.whisker.Keyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A00000000000000000000005 /* Build configuration list for PBXProject "Whisker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00000000000000000000007 /* Debug */,
+				A00000000000000000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A00000000000000000000006 /* Build configuration list for PBXNativeTarget "Whisker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00000000000000000000009 /* Debug */,
+				A0000000000000000000000A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A000000000000000000000C1 /* Build configuration list for PBXNativeTarget "WhiskerKeyboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A000000000000000000000C2 /* Debug */,
+				A000000000000000000000C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = A00000000000000000000001 /* Project object */;
+}

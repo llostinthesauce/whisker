@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Whisker iPhone app preview</title>
+  <desc id="desc">A Whisker app screen showing server status, model, cleanup, timeout, keyboard session, and a record button.</desc>
+  <rect width="900" height="620" fill="#eefbf8"/>
+  <rect x="310" y="34" width="280" height="552" rx="42" fill="#0b2430"/>
+  <rect x="326" y="54" width="248" height="512" rx="32" fill="#f7fffb"/>
+  <text x="450" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="34" fill="#047aab">whisker</text>
+  <rect x="346" y="132" width="208" height="104" rx="18" fill="#e3f6ef" stroke="#9fdccf"/>
+  <text x="366" y="162" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#10343e">server ready</text>
+  <circle cx="536" cy="157" r="7" fill="#2c9b63"/>
+  <text x="366" y="188" font-family="Arial, sans-serif" font-size="13" fill="#31525c">model: balanced</text>
+  <text x="366" y="211" font-family="Arial, sans-serif" font-size="13" fill="#31525c">cleanup: message</text>
+  <text x="470" y="211" font-family="Arial, sans-serif" font-size="13" fill="#31525c">timeout: 5m</text>
+  <rect x="346" y="256" width="208" height="172" rx="16" fill="#ffffff" stroke="#d8ebe7"/>
+  <text x="450" y="338" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#8b9da2">tap below to record</text>
+  <rect x="355" y="448" width="190" height="42" rx="21" fill="#0d82a3"/>
+  <text x="450" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">start keyboard session</text>
+  <circle cx="450" cy="525" r="34" fill="#2cc0ac"/>
+  <path d="M450 505c-8 0-14 6-14 14v8c0 8 6 14 14 14s14-6 14-14v-8c0-8-6-14-14-14z" fill="#ffffff"/>
+  <rect x="445" y="536" width="10" height="16" rx="5" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Whisker server health preview</title>
+  <desc id="desc">A terminal-style server health response showing authenticated status, active model, and cleanup modes.</desc>
+  <rect width="900" height="620" fill="#101820"/>
+  <rect x="84" y="84" width="732" height="452" rx="18" fill="#17232d" stroke="#2c3f4b"/>
+  <circle cx="120" cy="118" r="8" fill="#f26d5b"/>
+  <circle cx="148" cy="118" r="8" fill="#f6c85f"/>
+  <circle cx="176" cy="118" r="8" fill="#61c47b"/>
+  <text x="112" y="168" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="20" fill="#9ee6d3">$ curl -H "Authorization: Bearer ..." /health</text>
+  <text x="112" y="214" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#d8f4ea">{</text>
+  <text x="138" y="252" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#d8f4ea">"ok": true,</text>
+  <text x="138" y="290" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#d8f4ea">"engine": "parakeet-mlx",</text>
+  <text x="138" y="328" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#d8f4ea">"model": "parakeet-tdt-0.6b-v3",</text>
+  <text x="138" y="366" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#d8f4ea">"default_model_id": "balanced",</text>
+  <text x="138" y="404" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#d8f4ea">"cleanup": ["raw", "message", "notes", "bullets"]</text>
+  <text x="112" y="442" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#d8f4ea">}</text>
+</svg>
