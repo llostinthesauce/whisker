@@ -13,14 +13,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # The runner's python3 is Homebrew-managed (PEP 668) and refuses bare
+      # pip installs, so use a venv — same as the documented server setup.
       - name: Install server dependencies
-        run: python3 -m pip install -r server/requirements.txt
+        run: |
+          python3 -m venv .ci-venv
+          .ci-venv/bin/python -m pip install -r server/requirements.txt
 
       - name: Python compile
-        run: python3 -m compileall -q server/*.py server/cleanup server/engines server/tests scripts gen_xcodeproj.py
+        run: .ci-venv/bin/python -m compileall -q server/*.py server/cleanup server/engines server/tests scripts gen_xcodeproj.py
 
       - name: Python tests
-        run: python3 -m unittest discover server/tests
+        run: .ci-venv/bin/python -m unittest discover server/tests
 
       - name: Swift tests
         run: swift test
