@@ -238,10 +238,13 @@ class ServerConfig:
             or "127.0.0.1",
             port=_env_int(source, "WHISKER_PORT", 8787),
             auth_token=token,
+            # 80 MiB: a full 5-minute (WHISKER_MAX_DURATION_SECONDS /
+            # RecordingLimits.maxDurationSeconds) CAF at 48 kHz float32 mono is
+            # ~57.6 MB, so the whole-file fallback must fit with headroom.
             max_upload_bytes=_env_int(
                 source,
                 "WHISKER_MAX_UPLOAD_BYTES",
-                50 * 1024 * 1024,
+                80 * 1024 * 1024,
             ),
             max_duration_seconds=_env_float(
                 source,

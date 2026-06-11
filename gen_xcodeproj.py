@@ -71,7 +71,6 @@ SOURCES = [
     (u(0x66), u(0x67), "Features/Settings/PermissionsOnboardingView.swift"),
     (u(0x70), u(0x71), "Shared/Models/Transcript.swift"),
     (u(0x72), u(0x73), "Shared/Models/DictationResult.swift"),
-    (u(0x74), u(0x75), "Shared/Models/AudioSegment.swift"),
     (u(0x80), u(0x81), "Shared/Services/PermissionsService.swift"),
     (u(0x82), u(0x83), "Shared/Services/HistoryStore.swift"),
     (u(0x84), u(0x85), "Shared/Services/Logger.swift"),
@@ -525,6 +524,12 @@ COMMON_TARGET = {
     "SWIFT_VERSION": "6.0",
     "TARGETED_DEVICE_FAMILY": '"1"',
     "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES": "YES",
+    # Substituted into Whisker/Info.plist so RemoteMacSettings can seed
+    # first-launch server endpoints. Empty by default (the public build seeds
+    # nothing); set these env vars when regenerating the project to bake
+    # personal defaults in without committing them.
+    "WHISKER_DEFAULT_LOCAL_SERVER_URL": f'"{os.environ.get("WHISKER_DEFAULT_LOCAL_SERVER_URL", "")}"',
+    "WHISKER_DEFAULT_FALLBACK_SERVER_URL": f'"{os.environ.get("WHISKER_DEFAULT_FALLBACK_SERVER_URL", "")}"',
 }
 
 EXT_TARGET_SETTINGS = {

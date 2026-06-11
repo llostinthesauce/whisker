@@ -75,6 +75,8 @@ Technical highlights:
 
 The keyboard does not record audio directly. iOS third-party keyboard constraints require the main app to own microphone capture, so opening Whisker from the keyboard starts a handoff session and results move back through the app group handoff file. Individual recordings are capped at five minutes.
 
+A keyboard session keeps the microphone and audio engine active for its whole lifetime — that is what keeps the app alive in the background, so expect the orange mic indicator and some battery drain while a session runs. Sessions stop themselves after 15 minutes without activity; stop one manually from the app when you are done dictating.
+
 ## Xcode Signing
 
 To install Whisker on your iPhone, you need Xcode on a Mac and an Apple ID.
@@ -141,7 +143,7 @@ Override these with `WHISKER_FAST_MODEL` and `WHISKER_PARAKEET_MODEL`.
 - `notes`: split sentence-like text onto separate lines.
 - `bullets`: split sentence-like text into a bullet list.
 
-Cleanup runs on the server when the app requests cleaned text.
+The server (`server/cleanup/rules.py`) owns cleanup semantics. Batch and whole-file-fallback requests are cleaned on the server; streaming dictation joins its segments on-device and cleans them with `RuleBasedCleaner`, a line-for-line port of the server rules whose parity is pinned by mirrored tests on both sides. Change cleanup behavior in both places or not at all.
 
 ## Security Notes
 

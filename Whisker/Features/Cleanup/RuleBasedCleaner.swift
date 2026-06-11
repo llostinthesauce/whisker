@@ -1,5 +1,9 @@
 import Foundation
 
+/// Faithful port of `server/cleanup/rules.py`. The server owns cleanup
+/// semantics; this mirror exists only so streaming joins cleaned on-device
+/// produce the same text as the server's batch and whole-file-fallback paths.
+/// Any behavior change must land in both implementations.
 public struct RuleBasedCleaner: TextCleaner {
     public init() {}
 
@@ -8,101 +12,66 @@ public struct RuleBasedCleaner: TextCleaner {
         case .raw:
             return input
         case .light:
-            return lightClean(input)
+            return normalizeWhitespace(input)
         case .message, .email:
-            return formatSentence(lightClean(input))
+            return sentenceStart(normalizeWhitespace(input))
         case .notes:
-            return sentenceUnits(from: lightClean(input))
-                .map(formatSentence)
-                .joined(separator: "\n")
+            return splitSentences(normalizeWhitespace(input)).joined(separator: "\n")
         case .bullets:
-            let items = spokenNumberedItems(from: input)
-            let bulletItems = items.isEmpty ? sentenceUnits(from: lightClean(input)) : items
-            return bulletItems
-                .map { "- \(formatSentence($0))" }
+            return splitSentences(normalizeWhitespace(input))
+                .map { "- \($0)" }
                 .joined(separator: "\n")
-        case .markdown, .concise:
-            return input
         }
     }
 
-    private func lightClean(_ input: String) -> String {
-        input
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .split(whereSeparator: { $0.isWhitespace })
-            .joined(separator: " ")
+    /// Mirrors `normalize_whitespace`: collapses runs of horizontal whitespace
+    /// to one space, reduces 3+ newlines to a paragraph break, and trims.
+    private func normalizeWhitespace(_ input: String) -> String {
+        var text = input.replacingOccurrences(of: "\u{00A0}", with: " ")
+        text = replacing(text, pattern: "[ \t\r\u{000B}\u{000C}]+", with: " ")
+        text = replacing(text, pattern: "\\n{3,}", with: "\n\n")
+        return text.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    private func formatSentence(_ input: String) -> String {
-        let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return trimmed }
-
-        let capitalized = capitalizedFirstCharacter(trimmed)
-        guard !hasTerminalPunctuation(capitalized) else { return capitalized }
-        return capitalized + "."
-    }
-
-    private func capitalizedFirstCharacter(_ input: String) -> String {
+    /// Mirrors `_sentence_start`: uppercases the first character only.
+    private func sentenceStart(_ input: String) -> String {
         guard let first = input.first else { return input }
-        let firstString = String(first)
-        return firstString.uppercased() + String(input.dropFirst())
+        return String(first).uppercased() + String(input.dropFirst())
     }
 
-    private func hasTerminalPunctuation(_ input: String) -> Bool {
-        guard let last = input.last else { return false }
-        return ".?!".contains(last)
-    }
-
-    private func sentenceUnits(from input: String) -> [String] {
-        let normalized = lightClean(input)
-        guard !normalized.isEmpty else { return [] }
-
-        let pattern = #"(?<=[.!?])\s+"#
-        guard let regex = try? NSRegularExpression(pattern: pattern) else {
-            return [normalized]
-        }
-
-        let range = NSRange(normalized.startIndex..<normalized.endIndex, in: normalized)
-        let matches = regex.matches(in: normalized, range: range)
-        guard !matches.isEmpty else { return [normalized] }
-
-        var units: [String] = []
-        var start = normalized.startIndex
-        for match in matches {
-            guard let separatorRange = Range(match.range, in: normalized) else { continue }
-            let unit = String(normalized[start..<separatorRange.lowerBound])
-            units.append(unit)
-            start = separatorRange.upperBound
-        }
-        units.append(String(normalized[start...]))
-
-        return units
+    /// Mirrors `_split_sentences`: splits after terminal punctuation and
+    /// capitalizes each sentence.
+    private func splitSentences(_ input: String) -> [String] {
+        guard !input.isEmpty else { return [] }
+        let sentences = split(input, separatorPattern: "(?<=[.!?])\\s+")
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
+            .map(sentenceStart)
+        return sentences.isEmpty ? [input] : sentences
     }
 
-    private func spokenNumberedItems(from input: String) -> [String] {
-        let normalized = lightClean(input)
-        let pattern = #"(?i)\bnumber\s+(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\b\s*"#
-        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+    private func replacing(_ input: String, pattern: String, with template: String) -> String {
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return input }
+        let range = NSRange(input.startIndex..<input.endIndex, in: input)
+        return regex.stringByReplacingMatches(in: input, range: range, withTemplate: template)
+    }
 
-        let nsString = normalized as NSString
-        let fullRange = NSRange(location: 0, length: nsString.length)
-        let matches = regex.matches(in: normalized, range: fullRange)
-        guard matches.count >= 2 else { return [] }
-
-        var items: [String] = []
-        for index in matches.indices {
-            let start = matches[index].range.location + matches[index].range.length
-            let end = index + 1 < matches.count ? matches[index + 1].range.location : nsString.length
-            guard end > start else { continue }
-            let item = nsString.substring(with: NSRange(location: start, length: end - start))
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-            if !item.isEmpty {
-                items.append(item)
-            }
+    private func split(_ input: String, separatorPattern: String) -> [String] {
+        guard let regex = try? NSRegularExpression(pattern: separatorPattern) else {
+            return [input]
         }
+        let range = NSRange(input.startIndex..<input.endIndex, in: input)
+        let matches = regex.matches(in: input, range: range)
+        guard !matches.isEmpty else { return [input] }
 
-        return items
+        var pieces: [String] = []
+        var start = input.startIndex
+        for match in matches {
+            guard let separatorRange = Range(match.range, in: input) else { continue }
+            pieces.append(String(input[start..<separatorRange.lowerBound]))
+            start = separatorRange.upperBound
+        }
+        pieces.append(String(input[start...]))
+        return pieces
     }
 }

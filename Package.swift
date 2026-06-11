@@ -16,9 +16,6 @@ var targets: [Target] = [
         name: "WhiskerModels",
         dependencies: ["WhiskerCleanup"],
         path: "Whisker/Shared/Models",
-        exclude: [
-            "AudioSegment.swift"
-        ],
         sources: [
             "DictationResult.swift",
             "Transcript.swift"

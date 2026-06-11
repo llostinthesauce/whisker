@@ -34,7 +34,6 @@
 		A00000000000000000000067 /* PermissionsOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000066 /* PermissionsOnboardingView.swift */; };
 		A00000000000000000000071 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000070 /* Transcript.swift */; };
 		A00000000000000000000073 /* DictationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000072 /* DictationResult.swift */; };
-		A00000000000000000000075 /* AudioSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000074 /* AudioSegment.swift */; };
 		A00000000000000000000081 /* PermissionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000080 /* PermissionsService.swift */; };
 		A00000000000000000000083 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000082 /* HistoryStore.swift */; };
 		A00000000000000000000085 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000084 /* Logger.swift */; };
@@ -91,7 +90,6 @@
 		A00000000000000000000066 /* PermissionsOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsOnboardingView.swift; sourceTree = "<group>"; };
 		A00000000000000000000070 /* Transcript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcript.swift; sourceTree = "<group>"; };
 		A00000000000000000000072 /* DictationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationResult.swift; sourceTree = "<group>"; };
-		A00000000000000000000074 /* AudioSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSegment.swift; sourceTree = "<group>"; };
 		A00000000000000000000080 /* PermissionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsService.swift; sourceTree = "<group>"; };
 		A00000000000000000000082 /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
 		A00000000000000000000084 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -317,7 +315,6 @@
 			children = (
 				A00000000000000000000070,
 				A00000000000000000000072,
-				A00000000000000000000074,
 			);
 			name = Models;
 			path = Models;
@@ -485,7 +482,6 @@
 				A00000000000000000000067 /* PermissionsOnboardingView.swift in Sources */,
 				A00000000000000000000071 /* Transcript.swift in Sources */,
 				A00000000000000000000073 /* DictationResult.swift in Sources */,
-				A00000000000000000000075 /* AudioSegment.swift in Sources */,
 				A00000000000000000000081 /* PermissionsService.swift in Sources */,
 				A00000000000000000000083 /* HistoryStore.swift in Sources */,
 				A00000000000000000000085 /* Logger.swift in Sources */,
@@ -667,6 +663,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1";
+				WHISKER_DEFAULT_FALLBACK_SERVER_URL = "";
+				WHISKER_DEFAULT_LOCAL_SERVER_URL = "";
 			};
 			name = Debug;
 		};
@@ -698,6 +696,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1";
+				WHISKER_DEFAULT_FALLBACK_SERVER_URL = "";
+				WHISKER_DEFAULT_LOCAL_SERVER_URL = "";
 			};
 			name = Release;
 		};

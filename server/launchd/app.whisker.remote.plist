@@ -10,7 +10,7 @@
   <array>
     <string>/bin/sh</string>
     <string>-lc</string>
-    <string>exec "${WHISKER_REMOTE_ROOT:-$HOME/whisker-remote}/server/run_server.sh"</string>
+    <string>exec "${WHISKER_REMOTE_ROOT:-$HOME/src/whisker}/server/run_server.sh" >>"$HOME/Library/Logs/whisker-remote-server.log" 2>>"$HOME/Library/Logs/whisker-remote-server.err.log"</string>
   </array>
 
   <key>RunAtLoad</key>
@@ -21,11 +21,5 @@
 
   <key>ThrottleInterval</key>
   <integer>10</integer>
-
-  <key>StandardOutPath</key>
-  <string>/tmp/whisker-remote-server.log</string>
-
-  <key>StandardErrorPath</key>
-  <string>/tmp/whisker-remote-server.err.log</string>
 </dict>
 </plist>

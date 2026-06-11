@@ -1,3 +1,4 @@
+import functools
 import logging
 import tempfile
 import time
@@ -17,7 +18,12 @@ from .config import ModelProfile, ServerConfig
 from .engines.base import AsrEngine
 from .engines.parakeet_mlx import ParakeetMlxEngine
 from .engines.whisper_cpp import WhisperCppEngine
-from .schemas import HealthResponse, ModelProfileResponse, TranscriptionResponse
+from .schemas import (
+    HealthResponse,
+    ModelProfileResponse,
+    TranscriptSegment,
+    TranscriptionResponse,
+)
 from .status import StatusMetrics, build_status_payload, render_status_html
 
 
@@ -146,19 +152,29 @@ async def transcribe(
             wav_path = temp_dir / "input.wav"
             await _save_upload(file, input_path)
 
-            duration = probe_duration_seconds(
-                CONFIG.ffprobe_path,
-                input_path,
-                timeout=min(CONFIG.request_timeout_seconds, 60),
+            # ffprobe/ffmpeg are synchronous subprocess calls with timeouts up
+            # to request_timeout_seconds; run them on worker threads so they
+            # never block the event loop (concurrent streaming-segment uploads
+            # and /health depend on it staying free).
+            duration = await anyio.to_thread.run_sync(
+                functools.partial(
+                    probe_duration_seconds,
+                    CONFIG.ffprobe_path,
+                    input_path,
+                    timeout=min(CONFIG.request_timeout_seconds, 60),
+                )
             )
             if duration is not None and duration > CONFIG.max_duration_seconds:
                 raise HTTPException(status_code=413, detail="Audio duration exceeds limit")
 
-            convert_to_wav(
-                CONFIG.ffmpeg_path,
-                input_path,
-                wav_path,
-                timeout=CONFIG.request_timeout_seconds,
+            await anyio.to_thread.run_sync(
+                functools.partial(
+                    convert_to_wav,
+                    CONFIG.ffmpeg_path,
+                    input_path,
+                    wav_path,
+                    timeout=CONFIG.request_timeout_seconds,
+                )
             )
             result = await anyio.to_thread.run_sync(engine.transcribe, wav_path, duration or 0.0)
     except HTTPException as error:
@@ -229,7 +245,10 @@ async def transcribe(
         model=engine.model,
         model_id=profile.id,
         processing_seconds=processing_seconds,
-        segments=[],
+        segments=[
+            TranscriptSegment(start=segment.start, end=segment.end, text=segment.text)
+            for segment in result.segments
+        ],
         warnings=result.warnings,
     )
 

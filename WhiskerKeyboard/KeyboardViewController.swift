@@ -34,7 +34,7 @@ class KeyboardViewController: UIInputViewController {
     private var statusPollTimer: Timer?
     private var lastKnownStatus: HandoffResult.HandoffStatus?
     private var liveTranscriptInserter = KeyboardLiveTranscriptInserter()
-    private var letterButtons: [UIButton] = []
+    private var letterKeys: [(button: UIButton, letter: String)] = []
     private var shiftEnabled = false
 
     // MARK: - Lifecycle
@@ -117,8 +117,8 @@ class KeyboardViewController: UIInputViewController {
     }
 
     @objc private func keyTapped(_ sender: UIButton) {
-        guard let value = sender.accessibilityValue, !value.isEmpty else { return }
-        textDocumentProxy.insertText(shiftEnabled ? value.uppercased() : value.lowercased())
+        guard let letter = letterKeys.first(where: { $0.button === sender })?.letter else { return }
+        textDocumentProxy.insertText(shiftEnabled ? letter.uppercased() : letter.lowercased())
         if shiftEnabled {
             shiftEnabled = false
             updateLetterCaps()
@@ -574,11 +574,11 @@ class KeyboardViewController: UIInputViewController {
 
     private func makeLetterButton(_ letter: String) -> UIButton {
         let button = UIButton(type: .system)
-        button.accessibilityValue = letter
+        button.accessibilityLabel = letter
         button.addTarget(self, action: #selector(keyTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         styleKeyButton(button, title: letter, imageName: nil, modifier: false)
-        letterButtons.append(button)
+        letterKeys.append((button: button, letter: letter))
         return button
     }
 
@@ -617,10 +617,9 @@ class KeyboardViewController: UIInputViewController {
     }
 
     private func updateLetterCaps() {
-        for button in letterButtons {
-            guard let value = button.accessibilityValue else { continue }
+        for (button, letter) in letterKeys {
             var config = button.configuration
-            config?.title = shiftEnabled ? value.uppercased() : value.lowercased()
+            config?.title = shiftEnabled ? letter.uppercased() : letter.lowercased()
             button.configuration = config
         }
 

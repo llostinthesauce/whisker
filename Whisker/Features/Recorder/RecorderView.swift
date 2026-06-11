@@ -499,8 +499,8 @@ private struct RecorderStatusSnapshot: Equatable {
 
     var timeoutLabel: String {
         switch timeoutSeconds {
-        case 1:
-            return "immediate"
+        case 60:
+            return "1 min"
         case 300:
             return "5 min"
         default:
@@ -514,8 +514,9 @@ private struct RecorderStatusSnapshot: Equatable {
         let rawFallbackURL = defaults.string(forKey: RemoteMacSettings.fallbackBaseURLKey) ?? ""
         let serverLabel = Self.serverLabel(localURLString: rawURL, fallbackURLString: rawFallbackURL)
 
-        let savedTimeout = defaults.double(forKey: RemoteMacSettings.timeoutSecondsKey)
-        let timeout = [1.0, 300.0].contains(savedTimeout) ? savedTimeout : 300
+        let timeout = RemoteMacSettings.normalizedTimeout(
+            defaults.double(forKey: RemoteMacSettings.timeoutSecondsKey)
+        )
         let modelID = defaults.string(forKey: RemoteMacSettings.selectedModelIDKey) ?? "balanced"
 
         return RecorderStatusSnapshot(

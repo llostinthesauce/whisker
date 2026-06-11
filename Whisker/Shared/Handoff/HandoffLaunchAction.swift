@@ -10,8 +10,6 @@ enum HandoffLaunchAction: Equatable {
         switch url.host {
         case "record":
             return isKeyboardSource(url) ? .keyboardSession : .oneShotRecording
-        case "keyboard-session":
-            return .keyboardSession
         default:
             return nil
         }

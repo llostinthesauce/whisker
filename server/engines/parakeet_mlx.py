@@ -10,6 +10,13 @@ from .base import TranscriptSegment, TranscriptionResult
 class ParakeetMlxEngine:
     name = "parakeet-mlx"
 
+    # Serializes lazy load + inference across ALL engine instances, not just
+    # one. The server keeps one engine per model profile (fast/balanced) and
+    # streaming dictation uploads segments concurrently, so without a shared
+    # lock two different MLX models could run inference at the same time on
+    # the same Metal device. MLX inference is not safe to enter concurrently.
+    _inference_lock = threading.Lock()
+
     def __init__(
         self,
         model_name: str,
@@ -21,11 +28,6 @@ class ParakeetMlxEngine:
         self.ffmpeg_path = ffmpeg_path
         self.model = model_name.rsplit("/", 1)[-1]
         self._model: Any = None
-        # Serializes lazy load + inference. The cached MLX model is shared across
-        # the server's worker threads (streaming dictation uploads segments
-        # concurrently), and MLX inference is not safe to enter concurrently on a
-        # single model instance.
-        self._lock = threading.Lock()
 
     def is_available(self) -> bool:
         return importlib.util.find_spec("parakeet_mlx") is not None
@@ -34,7 +36,7 @@ class ParakeetMlxEngine:
         if not self.is_available():
             raise RuntimeError("parakeet-mlx is not installed")
 
-        with self._lock:
+        with ParakeetMlxEngine._inference_lock:
             self._ensure_ffmpeg_on_path()
             model = self._load_model()
             result = model.transcribe(str(wav_path))

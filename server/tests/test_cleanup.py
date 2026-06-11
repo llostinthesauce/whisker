@@ -21,3 +21,11 @@ class CleanupTests(unittest.TestCase):
             clean_text("first thing. second thing? final thing!", "bullets"),
             "- First thing.\n- Second thing?\n- Final thing!",
         )
+
+    def test_notes_split_sentences_onto_lines(self):
+        # Mirrored by Tests/RuleBasedCleanerTests.swift: the on-device cleaner
+        # is a port of these rules and must stay byte-identical.
+        self.assertEqual(
+            clean_text("First thing. second thing third thing?", "notes"),
+            "First thing.\nSecond thing third thing?",
+        )

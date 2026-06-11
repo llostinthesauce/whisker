@@ -112,29 +112,25 @@ final class RemoteMacClient: RemoteMacClientProtocol, @unchecked Sendable {
 
     func transcribe(audioURL: URL, cleanupMode: CleanupMode, returnCleaned: Bool) async throws -> RemoteTranscriptionResponse {
         let boundary = "Boundary-\(UUID().uuidString)"
-        let audioData: Data
-        do {
-            audioData = try Data(contentsOf: audioURL)
-        } catch {
-            throw RemoteMacError.uploadFileUnreadable
-        }
-
-        let body = makeMultipartBody(
+        // Recordings can run to tens of megabytes; compose the multipart body
+        // on disk and let URLSession stream it from the file instead of
+        // holding the audio (and a second copy in the body) in memory.
+        let bodyFileURL = try makeMultipartBodyFile(
             boundary: boundary,
-            audioData: audioData,
-            filename: audioURL.lastPathComponent,
+            audioURL: audioURL,
             cleanupMode: cleanupMode,
             returnCleaned: returnCleaned
         )
+        defer { try? FileManager.default.removeItem(at: bodyFileURL) }
 
         return try await sendOverEndpoints(
             as: RemoteTranscriptionResponse.self,
-            preflightFallbackCandidates: true
+            preflightFallbackCandidates: true,
+            uploadingBodyFile: bodyFileURL
         ) { endpoint, timeoutSeconds in
             var request = try makeRequest(endpoint: endpoint, path: "v1/transcribe", timeoutSeconds: timeoutSeconds)
             request.httpMethod = "POST"
             request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-            request.httpBody = body
             return request
         }
     }
@@ -160,6 +156,7 @@ final class RemoteMacClient: RemoteMacClientProtocol, @unchecked Sendable {
         as type: T.Type,
         quickTimeoutForFallbackCandidates: Bool = false,
         preflightFallbackCandidates: Bool = false,
+        uploadingBodyFile bodyFileURL: URL? = nil,
         requestFactory: (RemoteMacEndpoint, TimeInterval?) throws -> URLRequest
     ) async throws -> T {
         var lastError: Error?
@@ -179,7 +176,11 @@ final class RemoteMacClient: RemoteMacClientProtocol, @unchecked Sendable {
 
             do {
                 let timeoutSeconds = hasFallback && quickTimeoutForFallbackCandidates ? fallbackProbeTimeoutSeconds : nil
-                return try await send(try requestFactory(endpoint, timeoutSeconds), as: type)
+                return try await send(
+                    try requestFactory(endpoint, timeoutSeconds),
+                    uploadingBodyFile: bodyFileURL,
+                    as: type
+                )
             } catch {
                 lastError = error
                 guard shouldTryNextEndpoint(after: error) else {
@@ -201,11 +202,19 @@ final class RemoteMacClient: RemoteMacClientProtocol, @unchecked Sendable {
         _ = try await send(request, as: RemoteHealthResponse.self)
     }
 
-    private func send<T: Decodable>(_ request: URLRequest, as type: T.Type) async throws -> T {
+    private func send<T: Decodable>(
+        _ request: URLRequest,
+        uploadingBodyFile bodyFileURL: URL? = nil,
+        as type: T.Type
+    ) async throws -> T {
         let data: Data
         let response: URLResponse
         do {
-            (data, response) = try await session.data(for: request)
+            if let bodyFileURL {
+                (data, response) = try await session.upload(for: request, fromFile: bodyFileURL)
+            } else {
+                (data, response) = try await session.data(for: request)
+            }
         } catch let error as URLError where error.code == .timedOut {
             throw RemoteMacError.timeout
         } catch {
@@ -251,27 +260,47 @@ final class RemoteMacClient: RemoteMacClientProtocol, @unchecked Sendable {
         }
     }
 
-    private func makeMultipartBody(
+    /// Writes the multipart request body to a temporary file, copying the
+    /// audio across in 1 MiB chunks. The caller owns deleting the returned file.
+    private func makeMultipartBodyFile(
         boundary: String,
-        audioData: Data,
-        filename: String,
+        audioURL: URL,
         cleanupMode: CleanupMode,
         returnCleaned: Bool
-    ) -> Data {
-        var body = Data()
-        body.appendFormField(name: "cleanup_mode", value: cleanupMode.rawValue, boundary: boundary)
+    ) throws -> URL {
+        var prefix = Data()
+        prefix.appendFormField(name: "cleanup_mode", value: cleanupMode.rawValue, boundary: boundary)
         if let modelID = configuration.modelID?.trimmingCharacters(in: .whitespacesAndNewlines),
            !modelID.isEmpty {
-            body.appendFormField(name: "model_id", value: modelID, boundary: boundary)
+            prefix.appendFormField(name: "model_id", value: modelID, boundary: boundary)
         }
-        body.appendFormField(name: "return_cleaned", value: returnCleaned ? "true" : "false", boundary: boundary)
-        body.append("--\(boundary)\r\n")
-        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n")
-        body.append("Content-Type: application/octet-stream\r\n\r\n")
-        body.append(audioData)
-        body.append("\r\n")
-        body.append("--\(boundary)--\r\n")
-        return body
+        prefix.appendFormField(name: "return_cleaned", value: returnCleaned ? "true" : "false", boundary: boundary)
+        prefix.append("--\(boundary)\r\n")
+        prefix.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(audioURL.lastPathComponent)\"\r\n")
+        prefix.append("Content-Type: application/octet-stream\r\n\r\n")
+
+        let bodyFileURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("whisker-upload-\(UUID().uuidString).multipart")
+        do {
+            guard let reader = FileHandle(forReadingAtPath: audioURL.path) else {
+                throw RemoteMacError.uploadFileUnreadable
+            }
+            defer { try? reader.close() }
+
+            FileManager.default.createFile(atPath: bodyFileURL.path, contents: nil)
+            let writer = try FileHandle(forWritingTo: bodyFileURL)
+            defer { try? writer.close() }
+
+            try writer.write(contentsOf: prefix)
+            while let chunk = try reader.read(upToCount: 1024 * 1024), !chunk.isEmpty {
+                try writer.write(contentsOf: chunk)
+            }
+            try writer.write(contentsOf: Data("\r\n--\(boundary)--\r\n".utf8))
+        } catch {
+            try? FileManager.default.removeItem(at: bodyFileURL)
+            throw RemoteMacError.uploadFileUnreadable
+        }
+        return bodyFileURL
     }
 }
 

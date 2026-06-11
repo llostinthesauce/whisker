@@ -8,7 +8,7 @@ Generic private ASR server for the Whisker iOS app and keyboard. The iPhone uplo
 - Balanced model: `mlx-community/parakeet-tdt-0.6b-v3`.
 - Bind host: `127.0.0.1`.
 - Port: `8787`.
-- API paths: `GET /health`, `GET /v1/health`, and `POST /v1/transcribe`.
+- API paths: `GET /health`, `GET /v1/health`, `GET /v1/status`, `GET /status`, and `POST /v1/transcribe`.
 
 Keep this service private. Use a trusted LAN, direct Tailscale IP, or Tailscale Serve. Do not expose the raw FastAPI server to the public internet.
 
@@ -59,7 +59,19 @@ From the iPhone network path:
 curl -sS -H "Authorization: Bearer $WHISKER_AUTH_TOKEN" http://<mac-ip>:8787/health
 ```
 
-Expected shape:
+Runtime metrics (request counts, recent failures, model usage) are available
+once the server is up:
+
+```sh
+# JSON payload
+curl -sS -H "Authorization: Bearer $WHISKER_AUTH_TOKEN" http://127.0.0.1:8787/v1/status | python3 -m json.tool
+
+# HTML status page. Like every endpoint it requires the Authorization header,
+# so a plain browser visit returns 401 — fetch it with curl instead.
+curl -sS -H "Authorization: Bearer $WHISKER_AUTH_TOKEN" http://127.0.0.1:8787/status
+```
+
+Expected `/health` shape:
 
 ```json
 {
@@ -162,8 +174,8 @@ WHISKER_AUTH_TOKEN              required bearer token
 WHISKER_SERVER_NAME             default whisker-server
 WHISKER_BIND_HOST               default 127.0.0.1
 WHISKER_PORT                    default 8787
-WHISKER_MAX_UPLOAD_BYTES        default 52428800
-WHISKER_MAX_DURATION_SECONDS    default 300
+WHISKER_MAX_UPLOAD_BYTES        default 83886080; keep above ~60 MB so a full 5-minute CAF fits
+WHISKER_MAX_DURATION_SECONDS    default 300; matches the iPhone recording cap
 WHISKER_REQUEST_TIMEOUT_SECONDS default 300
 WHISKER_WORK_DIR                default ~/Library/Caches/WhiskerRemote
 WHISKER_FFMPEG                  default ffmpeg
@@ -202,7 +214,7 @@ launchctl bootstrap "gui/$(id -u)" ~/Library/LaunchAgents/app.whisker.remote.pli
 launchctl kickstart -k "gui/$(id -u)/app.whisker.remote"
 ```
 
-The plist assumes the repo is at `~/whisker-remote`. If your clone is elsewhere, either clone there or edit the plist command to set `WHISKER_REMOTE_ROOT`.
+The plist assumes the repo is at `~/src/whisker`. If your clone is elsewhere, either clone there or edit the plist command to set `WHISKER_REMOTE_ROOT`. Server logs are appended to `~/Library/Logs/whisker-remote-server.log` and `~/Library/Logs/whisker-remote-server.err.log`.
 
 ## Privacy Behavior
 

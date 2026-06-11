@@ -149,6 +149,15 @@ struct SettingsView: View {
         .onChange(of: remoteSettings.selectedModelID) { _, _ in
             appState.reloadProcessingConfiguration(resetAvailability: true)
         }
+        .onChange(of: remoteSettings.baseURLString) { _, _ in
+            appState.reloadProcessingConfiguration(resetAvailability: true)
+        }
+        .onChange(of: remoteSettings.fallbackBaseURLString) { _, _ in
+            appState.reloadProcessingConfiguration(resetAvailability: true)
+        }
+        .onChange(of: remoteSettings.bearerToken) { _, _ in
+            appState.reloadProcessingConfiguration(resetAvailability: true)
+        }
     }
 
     private var selectedModel: RemoteModelProfile? {
@@ -200,7 +209,7 @@ private struct RemoteTimeoutPreset: Identifiable {
     var id: Double { seconds }
 
     static let all: [RemoteTimeoutPreset] = [
-        RemoteTimeoutPreset(seconds: 1, label: "Immediate"),
+        RemoteTimeoutPreset(seconds: 60, label: "1 minute"),
         RemoteTimeoutPreset(seconds: 300, label: "5 minutes")
     ]
 }

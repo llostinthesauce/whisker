@@ -20,6 +20,5 @@ server/.pytest_cache/
 # Internal / dev-process files kept local-only (out of the public repo)
 NEXT_STEPS.md
 CONTRIBUTING.md
-Tests/
 docs/*.md
 docs/superpowers/

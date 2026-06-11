@@ -172,8 +172,8 @@ final class RemoteMacSettings: ObservableObject {
         return RemoteMacEndpoint(label: label, baseURL: url)
     }
 
-    private static func normalizedTimeout(_ seconds: Double) -> Double {
-        let allowed = [1.0, 300.0]
+    static func normalizedTimeout(_ seconds: Double) -> Double {
+        let allowed = [60.0, 300.0]
         return allowed.contains(seconds) ? seconds : 300
     }
 }
