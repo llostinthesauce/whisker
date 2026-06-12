@@ -69,10 +69,10 @@ struct StatsView: View {
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .background(.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 8))
+                    .background(WhiskerTheme.foam, in: RoundedRectangle(cornerRadius: 8))
                     .overlay {
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(WhiskerTheme.pacific.opacity(0.12), lineWidth: 1)
+                            .stroke(WhiskerTheme.pacific.opacity(0.15), lineWidth: 1)
                     }
                 }
             }
@@ -106,7 +106,7 @@ struct StatsView: View {
         if seconds >= 60 {
             let m = Int(seconds) / 60
             let s = Int(seconds) % 60
-            return String(format: "%dm %02ds", m, s)
+            return String(format: "%d:%02d", m, s)
         } else {
             return String(format: "%.0fs", seconds)
         }
@@ -143,7 +143,7 @@ private struct StatCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 10))
+        .background(WhiskerTheme.foam, in: RoundedRectangle(cornerRadius: 10))
         .overlay {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(WhiskerTheme.pacific.opacity(0.15), lineWidth: 1)
