@@ -9,6 +9,10 @@ struct DictationApp: App {
             RootView()
                 .environmentObject(appState)
                 .environmentObject(appState.permissions)
+                // The whisker palette is fixed light colors; without this,
+                // dark mode flips system grays/materials against the light
+                // gradient and contrast collapses.
+                .preferredColorScheme(.light)
                 .onOpenURL { url in
                     handleIncomingURL(url)
                 }

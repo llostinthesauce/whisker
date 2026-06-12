@@ -9,7 +9,7 @@ struct SettingsView: View {
     @State private var showDeleteConfirm = false
     @State private var remoteHealthMessage: String?
     @State private var isCheckingRemote = false
-    @State private var availableModels = RemoteModelProfile.defaults
+    @State private var availableModels = RemoteMacSettings.loadCachedModels() ?? RemoteModelProfile.defaults
 
     var body: some View {
         Form {
@@ -35,7 +35,7 @@ struct SettingsView: View {
                 }
 
                 Picker("Model", selection: $remoteSettings.selectedModelID) {
-                    ForEach(availableModels) { model in
+                    ForEach(pickerModels) { model in
                         Text(model.label).tag(model.id)
                     }
                 }
@@ -143,6 +143,9 @@ struct SettingsView: View {
         } message: {
             Text("This cannot be undone.")
         }
+        .onAppear {
+            refreshModelsQuietly()
+        }
         .onChange(of: remoteSettings.timeoutSeconds) { _, _ in
             appState.reloadProcessingConfiguration(resetAvailability: true)
         }
@@ -164,6 +167,41 @@ struct SettingsView: View {
         availableModels.first { $0.id == remoteSettings.selectedModelID }
     }
 
+    // The saved selection may reference a model the server reported in a past
+    // session but that is missing from the current list; without a matching tag
+    // the Picker renders blank, so surface it as a placeholder entry.
+    private var pickerModels: [RemoteModelProfile] {
+        let selectedID = remoteSettings.selectedModelID
+        guard !selectedID.isEmpty,
+              !availableModels.contains(where: { $0.id == selectedID }) else {
+            return availableModels
+        }
+        return availableModels + [
+            RemoteModelProfile(
+                id: selectedID,
+                label: selectedID,
+                engine: "",
+                model: selectedID,
+                speed: "",
+                description: "Saved selection. Run Test Server Connection to refresh details."
+            )
+        ]
+    }
+
+    private func refreshModelsQuietly() {
+        guard let configuration = remoteSettings.configuration else { return }
+        Task {
+            guard let health = try? await RemoteMacClient(configuration: configuration).health(),
+                  !health.models.isEmpty else {
+                return
+            }
+            await MainActor.run {
+                availableModels = health.models
+                RemoteMacSettings.saveCachedModels(health.models)
+            }
+        }
+    }
+
     private func testRemoteConnection() {
         guard let configuration = remoteSettings.configuration else {
             remoteHealthMessage = "Missing server URL or bearer token."
@@ -179,6 +217,7 @@ struct SettingsView: View {
                     isCheckingRemote = false
                     if !health.models.isEmpty {
                         availableModels = health.models
+                        RemoteMacSettings.saveCachedModels(health.models)
                     }
                     let selected = health.models.first { $0.id == remoteSettings.selectedModelID }
                     let selectedLabel = selected?.label ?? remoteSettings.selectedModelID

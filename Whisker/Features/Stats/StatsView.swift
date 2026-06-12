@@ -82,7 +82,7 @@ struct StatsView: View {
     private func sectionHeader(_ title: String) -> some View {
         Text(title.uppercased())
             .font(.system(size: 11, weight: .bold))
-            .foregroundStyle(.secondary)
+            .foregroundStyle(WhiskerTheme.deepOcean.opacity(0.6))
             .tracking(0.5)
     }
 
@@ -128,7 +128,7 @@ private struct StatCard: View {
                 .lineLimit(1)
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(WhiskerTheme.deepOcean.opacity(0.55))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 14)

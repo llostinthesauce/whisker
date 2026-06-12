@@ -2,8 +2,12 @@ import Foundation
 
 @MainActor
 final class HistoryStore: ObservableObject {
-    @Published private(set) var entries: [DictationResult] = []
-    var stats: WhiskerStats { WhiskerStats.compute(from: entries) }
+    @Published private(set) var entries: [DictationResult] = [] {
+        didSet { stats = WhiskerStats.compute(from: entries) }
+    }
+    // Cached, not computed: RecorderView reads this during body evaluation,
+    // which the recording timer triggers every 0.1s.
+    @Published private(set) var stats: WhiskerStats = .empty
 
     private let directory: URL
     private let storeFile: URL

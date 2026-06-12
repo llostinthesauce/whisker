@@ -46,6 +46,11 @@ struct RecorderView: View {
                 refreshStatusSnapshot()
                 startKeyboardSessionIfRequested()
                 startPendingHandoffIfNeeded()
+#if DEBUG
+                if UserDefaults.standard.bool(forKey: "debugShowStats") {
+                    showStats = true
+                }
+#endif
             }
             .onChange(of: scenePhase) { _, phase in handleScenePhaseChange(phase) }
             .onChange(of: appState.keyboardSessionStartRequestID) { _, _ in
@@ -179,6 +184,10 @@ struct RecorderView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(WhiskerTheme.deepOcean)
             Spacer(minLength: 8)
+            Text(statusSnapshot.modelID)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(WhiskerTheme.pacific)
+                .lineLimit(1)
             Text(statusSnapshot.serverLabel)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
@@ -380,12 +389,17 @@ struct RecorderView: View {
     // MARK: - Helpers
 
     private func placeholderText(_ text: String) -> some View {
-        Text(text)
-            .font(.body)
-            .foregroundStyle(.tertiary)
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity)
-            .padding(.top, 80)
+        VStack(spacing: 14) {
+            Image(systemName: "waveform")
+                .font(.system(size: 40, weight: .light))
+                .foregroundStyle(WhiskerTheme.pacific.opacity(0.35))
+            Text(text)
+                .font(.body)
+                .foregroundStyle(WhiskerTheme.deepOcean.opacity(0.5))
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 80)
     }
 
     private func formatElapsed(_ seconds: Double) -> String {
@@ -498,7 +512,7 @@ private struct TranscriptTextView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text("\(result.rawTranscript.engineName) · \(String(format: "%.1f", result.rawTranscript.durationSeconds))s")
                 .font(.caption)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(WhiskerTheme.deepOcean.opacity(0.5))
         }
     }
 }
@@ -515,8 +529,8 @@ private struct StatsStripTile: View {
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
             Text(label)
-                .font(.system(size: 9, weight: .semibold))
-                .foregroundStyle(.secondary)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(WhiskerTheme.deepOcean.opacity(0.55))
                 .textCase(.uppercase)
         }
         .frame(maxWidth: .infinity)

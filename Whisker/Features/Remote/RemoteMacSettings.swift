@@ -66,7 +66,25 @@ final class RemoteMacSettings: ObservableObject {
     static let endpointSeedVersionKey = "remoteMacEndpointSeedVersion"
     static let timeoutSecondsKey = "remoteMacTimeoutSeconds"
     static let selectedModelIDKey = "remoteMacSelectedModelID"
+    static let cachedModelsKey = "remoteMacCachedModels"
     private static let endpointSeedVersion = 1
+
+    static func loadCachedModels(from defaults: UserDefaults = .standard) -> [RemoteModelProfile]? {
+        guard let data = defaults.data(forKey: cachedModelsKey),
+              let models = try? JSONDecoder().decode([RemoteModelProfile].self, from: data),
+              !models.isEmpty else {
+            return nil
+        }
+        return models
+    }
+
+    static func saveCachedModels(_ models: [RemoteModelProfile], to defaults: UserDefaults = .standard) {
+        guard !models.isEmpty,
+              let data = try? JSONEncoder().encode(models) else {
+            return
+        }
+        defaults.set(data, forKey: cachedModelsKey)
+    }
 
     var configuration: RemoteMacClientConfiguration? {
         Self.configuration(
@@ -188,6 +206,14 @@ struct RemoteMacKeychainTokenStore: RemoteMacTokenStoring {
     private let account = "bearer-token"
 
     func read() -> String? {
+#if DEBUG
+        // Simulator/UI-test hook: pass "-debugBearerToken <token>" as a launch
+        // argument to bypass the keychain, which cannot be seeded externally.
+        if let override = UserDefaults.standard.string(forKey: "debugBearerToken"),
+           !override.isEmpty {
+            return override
+        }
+#endif
 #if canImport(Security)
         var query = baseQuery()
         query[kSecReturnData as String] = true
