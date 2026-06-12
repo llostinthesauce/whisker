@@ -21,4 +21,5 @@ server/.pytest_cache/
 NEXT_STEPS.md
 CONTRIBUTING.md
 docs/*.md
+!docs/index.md
 docs/superpowers/
