@@ -32,6 +32,7 @@
 		A00000000000000000000071 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000070 /* Transcript.swift */; };
 		A00000000000000000000073 /* DictationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000072 /* DictationResult.swift */; };
 		A00000000000000000000075 /* WhiskerStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000074 /* WhiskerStats.swift */; };
+		A00000000000000000000077 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000076 /* StatsView.swift */; };
 		A00000000000000000000081 /* PermissionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000080 /* PermissionsService.swift */; };
 		A00000000000000000000083 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000082 /* HistoryStore.swift */; };
 		A00000000000000000000085 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000084 /* Logger.swift */; };
@@ -112,6 +113,7 @@
 		A00000000000000000000070 /* Transcript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcript.swift; sourceTree = "<group>"; };
 		A00000000000000000000072 /* DictationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationResult.swift; sourceTree = "<group>"; };
 		A00000000000000000000074 /* WhiskerStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhiskerStats.swift; sourceTree = "<group>"; };
+		A00000000000000000000076 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		A00000000000000000000080 /* PermissionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsService.swift; sourceTree = "<group>"; };
 		A00000000000000000000082 /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
 		A00000000000000000000084 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				A0000000000000000000A005 /* Remote */,
 				A0000000000000000000A006 /* Clipboard */,
 				A0000000000000000000A007 /* Settings */,
+				A0000000000000000000A00E /* Stats */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -230,6 +233,14 @@
 				A00000000000000000000032 /* TranscriptionViewModel.swift */,
 			);
 			path = Transcription;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000A00E /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000076 /* StatsView.swift */,
+			);
+			path = Stats;
 			sourceTree = "<group>";
 		};
 		A0000000000000000000A003 /* Cleanup */ = {
@@ -469,6 +480,7 @@
 				A00000000000000000000071 /* Transcript.swift in Sources */,
 				A00000000000000000000073 /* DictationResult.swift in Sources */,
 				A00000000000000000000075 /* WhiskerStats.swift in Sources */,
+				A00000000000000000000077 /* StatsView.swift in Sources */,
 				A00000000000000000000081 /* PermissionsService.swift in Sources */,
 				A00000000000000000000083 /* HistoryStore.swift in Sources */,
 				A00000000000000000000085 /* Logger.swift in Sources */,
