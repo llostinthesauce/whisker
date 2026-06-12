@@ -33,4 +33,6 @@ jobs:
         run: xcodebuild -project Whisker.xcodeproj -scheme Whisker -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO
 
       - name: Private reference guard
-        run: bash scripts/private_reference_scan.sh
+        run: |
+          command -v rg >/dev/null 2>&1 || brew install ripgrep
+          bash scripts/private_reference_scan.sh
