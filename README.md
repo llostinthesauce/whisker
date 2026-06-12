@@ -30,8 +30,10 @@ Technical highlights:
 - SwiftUI iOS app.
 - Custom native-looking keyboard extension.
 - Authenticated remote ASR server.
+- Switchable MLX engines: Parakeet TDT and Qwen3-ASR (0.6B 4-bit / 1.7B 8-bit).
+- Usage stats dashboard: words, audio time, sessions, per-engine breakdown.
 - Configurable model profiles and cleanup modes.
-- Tailscale-friendly private networking.
+- Tailscale-friendly private networking with LAN-first failover.
 
 ## Quick Start
 
@@ -125,7 +127,7 @@ Do not put this raw FastAPI service on the public internet. If you need internet
 
 ## Models
 
-The server exposes two model profiles to the app:
+The server exposes two Parakeet profiles to the app by default:
 
 | Profile | Default model | Use |
 | --- | --- | --- |
@@ -133,6 +135,34 @@ The server exposes two model profiles to the app:
 | `balanced` | `mlx-community/parakeet-tdt-0.6b-v3` | Default quality/speed tradeoff. |
 
 Override these with `WHISKER_FAST_MODEL` and `WHISKER_PARAKEET_MODEL`.
+
+Additional engines can be added as switchable profiles with
+`WHISKER_EXTRA_MODEL_PROFILES` (a JSON array). Supported engines:
+
+| Engine | Backend | Notes |
+| --- | --- | --- |
+| `parakeet_mlx` | parakeet-mlx | Default; Apple Silicon. |
+| `qwen3-asr-06b` | mlx-audio | Qwen3-ASR 0.6B 4-bit; balanced speed/quality. |
+| `qwen3-asr-17b` | mlx-audio | Qwen3-ASR 1.7B 8-bit; highest quality, slower. |
+| `whisper_cpp` | whisper.cpp CLI | Portable; works on Linux. |
+
+Example:
+
+```sh
+WHISKER_EXTRA_MODEL_PROFILES='[{"id":"qwen3-06b","label":"Qwen3-ASR 0.6B 4-bit","engine":"qwen3-asr-06b","model":"aufklarer/Qwen3-ASR-0.6B-MLX-4bit","speed":"medium","description":"Qwen3-ASR 0.6B 4-bit quantized."}]'
+```
+
+The app discovers profiles from `/v1/health`, remembers them between
+launches, and sends the selected `model_id` with every transcription
+request. All MLX engines share a single inference lock so concurrent
+requests never run two models on the Metal device at once.
+
+## Stats
+
+The recorder shows a tappable strip with total words, today's
+transcriptions, and total audio time. The full sheet adds all-time and
+per-session aggregates plus a per-engine breakdown. Stats are computed
+from saved history only - nothing extra is collected or sent anywhere.
 
 ## Cleanup Modes
 
