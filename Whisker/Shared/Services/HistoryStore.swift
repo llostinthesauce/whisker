@@ -3,6 +3,7 @@ import Foundation
 @MainActor
 final class HistoryStore: ObservableObject {
     @Published private(set) var entries: [DictationResult] = []
+    var stats: WhiskerStats { WhiskerStats.compute(from: entries) }
 
     private let directory: URL
     private let storeFile: URL
