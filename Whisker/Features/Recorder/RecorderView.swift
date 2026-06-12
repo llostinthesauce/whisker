@@ -6,6 +6,8 @@ struct RecorderView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var statusSnapshot = RecorderStatusSnapshot.current()
     @State private var handledKeyboardSessionStartRequestID: UUID?
+    @ObservedObject private var historyStore: HistoryStore
+    @State private var showStats = false
 
     init(appState: AppState) {
         _vm = StateObject(wrappedValue: TranscriptionViewModel(
@@ -14,72 +16,86 @@ struct RecorderView: View {
             historyStore: appState.historyStore,
             clipboard: appState.clipboardService
         ))
+        _historyStore = ObservedObject(wrappedValue: appState.historyStore)
     }
 
     var body: some View {
+        mainContent
+            .background(WhiskerTheme.appBackground.ignoresSafeArea())
+            .sheet(isPresented: $showStats) {
+                StatsView(stats: historyStore.stats)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    WhiskerWordmark(size: 32)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundStyle(WhiskerTheme.pacific)
+                    }
+                }
+            }
+            .onAppear {
+                refreshStatusSnapshot()
+                startKeyboardSessionIfRequested()
+                startPendingHandoffIfNeeded()
+            }
+            .onChange(of: scenePhase) { _, phase in handleScenePhaseChange(phase) }
+            .onChange(of: appState.keyboardSessionStartRequestID) { _, _ in
+                startKeyboardSessionIfRequested()
+            }
+            .onChange(of: appState.handoffMode) { _, mode in
+                if case .pendingRecord = mode {
+                    startPendingHandoffIfNeeded()
+                }
+            }
+            .onChange(of: vm.state) { _, state in
+                handleStateChangeForHandoff(state)
+            }
+            .onChange(of: appState.engineAvailability) { _, _ in
+                refreshStatusSnapshot()
+            }
+            .onChange(of: appState.processingConfigurationRevision) { _, _ in
+                vm.setProcessor(appState.dictationProcessor)
+                refreshStatusSnapshot()
+            }
+            .onChange(of: vm.keyboardSessionActive) { _, _ in
+                refreshStatusSnapshot()
+            }
+            .onChange(of: vm.cleanupMode) { _, _ in
+                refreshStatusSnapshot()
+            }
+    }
+
+    @ViewBuilder
+    private var mainContent: some View {
         VStack(spacing: 0) {
             if isHandoffMode {
                 handoffBanner
             } else if vm.keyboardSessionActive {
                 keyboardSessionBanner
             }
-            statusPanel
+            serverStatusRow
+            statsStrip
             transcriptArea
             Divider()
                 .overlay(WhiskerTheme.pacific.opacity(0.18))
             controlBar
         }
-        .background(WhiskerTheme.appBackground.ignoresSafeArea())
-        .navigationTitle("")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                WhiskerWordmark(size: 32)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    SettingsView()
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .foregroundStyle(WhiskerTheme.pacific)
-                }
-            }
-        }
-        .onAppear {
+    }
+
+    private func handleScenePhaseChange(_ phase: ScenePhase) {
+        if phase == .active {
             refreshStatusSnapshot()
-            startKeyboardSessionIfRequested()
-            startPendingHandoffIfNeeded()
-        }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active {
-                refreshStatusSnapshot()
-            } else if !isHandoffMode && !vm.keyboardSessionActive {
-                vm.stopRecordingIfNeeded()
-            }
-        }
-        .onChange(of: appState.keyboardSessionStartRequestID) { _, _ in
-            startKeyboardSessionIfRequested()
-        }
-        .onChange(of: appState.handoffMode) { _, mode in
-            if case .pendingRecord = mode {
-                startPendingHandoffIfNeeded()
-            }
-        }
-        .onChange(of: vm.state) { _, state in
-            handleStateChangeForHandoff(state)
-        }
-        .onChange(of: appState.engineAvailability) { _, _ in
-            refreshStatusSnapshot()
-        }
-        .onChange(of: appState.processingConfigurationRevision) { _, _ in
-            vm.setProcessor(appState.dictationProcessor)
-            refreshStatusSnapshot()
-        }
-        .onChange(of: vm.keyboardSessionActive) { _, _ in
-            refreshStatusSnapshot()
-        }
-        .onChange(of: vm.cleanupMode) { _, _ in
-            refreshStatusSnapshot()
+        } else if !isHandoffMode && !vm.keyboardSessionActive {
+            vm.stopRecordingIfNeeded()
         }
     }
 
@@ -154,35 +170,73 @@ struct RecorderView: View {
         .background(WhiskerTheme.foam.opacity(0.72))
     }
 
-    private var statusPanel: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Circle()
-                    .fill(serverStatusColor)
-                    .frame(width: 8, height: 8)
-                Text(serverStatusLabel)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(WhiskerTheme.deepOcean)
-                Spacer(minLength: 8)
-                Text(statusSnapshot.serverLabel)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-            }
-
-            HStack(spacing: 8) {
-                StatusBadge(title: "model", value: statusSnapshot.modelID)
-                StatusBadge(title: "cleanup", value: ModelSettings.currentDefaultCleanupMode.displayName)
-            }
-            HStack(spacing: 8) {
-                StatusBadge(title: "timeout", value: statusSnapshot.timeoutLabel)
-                StatusBadge(title: "keyboard", value: keyboardStatusLabel)
-            }
+    private var serverStatusRow: some View {
+        HStack(spacing: 8) {
+            Circle()
+                .fill(serverStatusColor)
+                .frame(width: 8, height: 8)
+            Text(serverStatusLabel)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(WhiskerTheme.deepOcean)
+            Spacer(minLength: 8)
+            Text(statusSnapshot.serverLabel)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
         }
         .padding(.horizontal)
-        .padding(.vertical, 10)
+        .padding(.vertical, 8)
         .background(WhiskerTheme.foam.opacity(0.68))
+    }
+
+    private var statsStrip: some View {
+        Button {
+            showStats = true
+        } label: {
+            HStack(spacing: 0) {
+                StatsStripTile(
+                    value: historyStore.stats.totalWords.formatted(.number),
+                    label: "words"
+                )
+                stripDivider
+                StatsStripTile(
+                    value: "\(historyStore.stats.transcriptionsToday)",
+                    label: "today"
+                )
+                stripDivider
+                StatsStripTile(
+                    value: formatStripAudio(historyStore.stats.totalAudioSeconds),
+                    label: "audio"
+                )
+                Image(systemName: "chevron.right")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(WhiskerTheme.pacific.opacity(0.5))
+                    .padding(.trailing, 14)
+            }
+            .frame(maxWidth: .infinity)
+            .background(WhiskerTheme.foam.opacity(0.52))
+            .overlay(alignment: .bottom) {
+                Divider().overlay(WhiskerTheme.pacific.opacity(0.10))
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var stripDivider: some View {
+        Divider()
+            .frame(height: 28)
+            .overlay(WhiskerTheme.pacific.opacity(0.15))
+    }
+
+    private func formatStripAudio(_ seconds: Double) -> String {
+        if seconds >= 3600 {
+            return String(format: "%.1f hrs", seconds / 3600)
+        } else if seconds >= 60 {
+            return String(format: "%.0f min", seconds / 60)
+        } else {
+            return String(format: "%.0fs", seconds)
+        }
     }
 
     private var serverStatusLabel: String {
@@ -209,13 +263,6 @@ struct RecorderView: View {
         case .notChecked:
             return .secondary
         }
-    }
-
-    private var keyboardStatusLabel: String {
-        if vm.keyboardSessionActive {
-            return "on \(formatKeyboardSessionRemaining())"
-        }
-        return "off"
     }
 
     private func handleStateChangeForHandoff(_ state: RecordingState) {
@@ -466,29 +513,24 @@ private struct TranscriptTextView: View {
     }
 }
 
-private struct StatusBadge: View {
-    let title: String
+private struct StatsStripTile: View {
     let value: String
+    let label: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(title.uppercased())
-                .font(.system(size: 9, weight: .bold))
-                .foregroundStyle(.secondary)
+        VStack(spacing: 2) {
             Text(value)
-                .font(.caption.weight(.medium))
+                .font(.system(.callout, design: .rounded).weight(.bold))
                 .foregroundStyle(WhiskerTheme.deepOcean)
+                .minimumScaleFactor(0.7)
                 .lineLimit(1)
-                .minimumScaleFactor(0.72)
+            Text(label)
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .background(.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 8))
-        .overlay {
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(WhiskerTheme.pacific.opacity(0.12), lineWidth: 1)
-        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 10)
     }
 }
 
