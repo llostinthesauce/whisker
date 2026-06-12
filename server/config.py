@@ -87,9 +87,9 @@ def _model_profiles_from_json(raw: str, env_name: str) -> Tuple[ModelProfile, ..
         if not isinstance(item, dict):
             raise ValueError(f"{env_name}[{index}] must be an object")
         engine = _profile_field(item, "engine", env_name, index)
-        if engine not in {"parakeet_mlx", "whisper_cpp"}:
+        if engine not in {"parakeet_mlx", "whisper_cpp", "qwen3-asr-06b", "qwen3-asr-17b"}:
             raise ValueError(
-                f"{env_name}[{index}].engine must be one of: parakeet_mlx, whisper_cpp"
+                f"{env_name}[{index}].engine must be one of: parakeet_mlx, whisper_cpp, qwen3-asr-06b, qwen3-asr-17b"
             )
         profiles.append(
             ModelProfile(
@@ -169,8 +169,8 @@ class ServerConfig:
         )
 
         engine = source.get("WHISKER_ENGINE", "parakeet_mlx").strip().lower() or "parakeet_mlx"
-        if engine not in {"parakeet_mlx", "whisper_cpp"}:
-            raise ValueError("WHISKER_ENGINE must be one of: parakeet_mlx, whisper_cpp")
+        if engine not in {"parakeet_mlx", "whisper_cpp", "qwen3-asr-06b", "qwen3-asr-17b"}:
+            raise ValueError("WHISKER_ENGINE must be one of: parakeet_mlx, whisper_cpp, qwen3-asr-06b, qwen3-asr-17b")
 
         whisper_model_path = _expand_path(source.get("WHISKER_WHISPER_MODEL", home_model))
         parakeet_model = source.get(

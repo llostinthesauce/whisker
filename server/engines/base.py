@@ -1,6 +1,11 @@
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Protocol
+
+# Single shared lock for all MLX-based engines. MLX inference is not safe to
+# run concurrently on the same Metal device, even across different model classes.
+MLX_INFERENCE_LOCK = threading.Lock()
 
 
 @dataclass(frozen=True)

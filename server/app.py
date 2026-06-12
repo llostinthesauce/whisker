@@ -17,6 +17,8 @@ from .cleanup.rules import clean_text
 from .config import ModelProfile, ServerConfig
 from .engines.base import AsrEngine
 from .engines.parakeet_mlx import ParakeetMlxEngine
+from .engines.qwen3_asr_06b import Qwen3ASR06BEngine
+from .engines.qwen3_asr_17b import Qwen3ASR17BEngine
 from .engines.whisper_cpp import WhisperCppEngine
 from .schemas import (
     HealthResponse,
@@ -53,6 +55,16 @@ def build_engine(config: ServerConfig, profile: ModelProfile) -> AsrEngine:
     if profile.engine == "parakeet_mlx":
         return ParakeetMlxEngine(
             model_name=profile.model,
+            cache_dir=config.parakeet_cache_dir,
+            ffmpeg_path=config.ffmpeg_path,
+        )
+    if profile.engine == "qwen3-asr-06b":
+        return Qwen3ASR06BEngine(
+            cache_dir=config.parakeet_cache_dir,
+            ffmpeg_path=config.ffmpeg_path,
+        )
+    if profile.engine == "qwen3-asr-17b":
+        return Qwen3ASR17BEngine(
             cache_dir=config.parakeet_cache_dir,
             ffmpeg_path=config.ffmpeg_path,
         )
