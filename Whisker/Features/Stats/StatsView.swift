@@ -28,7 +28,7 @@ struct StatsView: View {
             sectionHeader("All Time")
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 StatCard(value: formatWords(stats.totalWords), label: "words")
-                StatCard(value: formatAudio(stats.totalAudioSeconds), label: "audio")
+                StatCard(value: WhiskerStats.formatAudioDuration(stats.totalAudioSeconds), label: "audio")
                 StatCard(value: "\(stats.totalTranscriptions)", label: "transcriptions")
                 StatCard(value: formatTimeSaved(stats.totalWords), label: "time saved", prefix: "~")
             }
@@ -90,16 +90,6 @@ struct StatsView: View {
 
     private func formatWords(_ count: Int) -> String {
         count.formatted(.number)
-    }
-
-    private func formatAudio(_ seconds: Double) -> String {
-        if seconds >= 3600 {
-            return String(format: "%.1f hrs", seconds / 3600)
-        } else if seconds >= 60 {
-            return String(format: "%.0f min", seconds / 60)
-        } else {
-            return String(format: "%.0fs", seconds)
-        }
     }
 
     private func formatDuration(_ seconds: Double) -> String {

@@ -67,4 +67,14 @@ public struct WhiskerStats: Sendable {
             perEngineBreakdown: breakdown
         )
     }
+
+    public static func formatAudioDuration(_ seconds: Double) -> String {
+        if seconds >= 3600 {
+            return String(format: "%.1f hrs", seconds / 3600)
+        } else if seconds >= 60 {
+            return String(format: "%.0f min", seconds / 60)
+        } else {
+            return String(format: "%.0fs", seconds)
+        }
+    }
 }

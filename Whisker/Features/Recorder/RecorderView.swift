@@ -206,7 +206,7 @@ struct RecorderView: View {
                 )
                 stripDivider
                 StatsStripTile(
-                    value: formatStripAudio(historyStore.stats.totalAudioSeconds),
+                    value: WhiskerStats.formatAudioDuration(historyStore.stats.totalAudioSeconds),
                     label: "audio"
                 )
                 Image(systemName: "chevron.right")
@@ -227,16 +227,6 @@ struct RecorderView: View {
         Divider()
             .frame(height: 28)
             .overlay(WhiskerTheme.pacific.opacity(0.15))
-    }
-
-    private func formatStripAudio(_ seconds: Double) -> String {
-        if seconds >= 3600 {
-            return String(format: "%.1f hrs", seconds / 3600)
-        } else if seconds >= 60 {
-            return String(format: "%.0f min", seconds / 60)
-        } else {
-            return String(format: "%.0fs", seconds)
-        }
     }
 
     private var serverStatusLabel: String {
