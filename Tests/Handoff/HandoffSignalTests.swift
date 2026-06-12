@@ -4,8 +4,12 @@ import XCTest
 @MainActor
 final class HandoffSignalTests: XCTestCase {
     override func tearDown() {
-        HandoffSignal.stopObserving(.command)
-        HandoffSignal.stopObserving(.result)
+        // tearDown overrides a nonisolated method, so the class-level @MainActor
+        // does not apply to it; XCTest runs it on the main thread regardless.
+        MainActor.assumeIsolated {
+            HandoffSignal.stopObserving(.command)
+            HandoffSignal.stopObserving(.result)
+        }
         super.tearDown()
     }
 
