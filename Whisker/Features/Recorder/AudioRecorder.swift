@@ -125,7 +125,13 @@ final class AudioRecorder: ObservableObject {
 
     private func configureSession() throws {
         let session = AVAudioSession.sharedInstance()
+#if compiler(>=6.2)
+        // .allowBluetooth was renamed .allowBluetoothHFP in the iOS 26 SDK;
+        // CI's stable Xcode only has the old name.
         try session.setCategory(.playAndRecord, mode: .default, options: [.allowBluetoothHFP, .mixWithOthers])
+#else
+        try session.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth, .mixWithOthers])
+#endif
         try session.setActive(true)
     }
 
