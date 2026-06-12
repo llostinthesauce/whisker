@@ -18,7 +18,8 @@ var targets: [Target] = [
         path: "Whisker/Shared/Models",
         sources: [
             "DictationResult.swift",
-            "Transcript.swift"
+            "Transcript.swift",
+            "WhiskerStats.swift",
         ]
     ),
     .target(
@@ -128,7 +129,12 @@ if FileManager.default.fileExists(atPath: "Tests") {
             name: "WhiskerHandoffTests",
             dependencies: ["WhiskerHandoff"],
             path: "Tests/Handoff"
-        )
+        ),
+        .testTarget(
+            name: "WhiskerModelsTests",
+            dependencies: ["WhiskerModels"],
+            path: "Tests/Models"
+        ),
     ]
 }
 
