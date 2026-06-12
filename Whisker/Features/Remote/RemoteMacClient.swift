@@ -61,6 +61,7 @@ enum RemoteMacError: Error, LocalizedError, Equatable {
     case unauthorized
     case timeout
     case fileTooLarge
+    case emptyTranscript
     case serverUnavailable(statusCode: Int)
 
     var errorDescription: String? {
@@ -77,6 +78,8 @@ enum RemoteMacError: Error, LocalizedError, Equatable {
             return "Server request timed out."
         case .fileTooLarge:
             return "Recording is too large for the server."
+        case .emptyTranscript:
+            return "No speech was detected in the recording."
         case .serverUnavailable(let statusCode):
             return "Server request failed with HTTP \(statusCode)."
         }
@@ -238,6 +241,11 @@ final class RemoteMacClient: RemoteMacClientProtocol, @unchecked Sendable {
             throw RemoteMacError.timeout
         case 413:
             throw RemoteMacError.fileTooLarge
+        case 422:
+            // The server transcribed the audio and found no speech. The server
+            // is healthy — retrying the same audio on the fallback endpoint
+            // would just re-upload it for the same answer.
+            throw RemoteMacError.emptyTranscript
         default:
             throw RemoteMacError.serverUnavailable(statusCode: httpResponse.statusCode)
         }
@@ -255,7 +263,7 @@ final class RemoteMacClient: RemoteMacClientProtocol, @unchecked Sendable {
         switch remoteError {
         case .timeout, .invalidResponse, .serverUnavailable:
             return true
-        case .missingToken, .uploadFileUnreadable, .unauthorized, .fileTooLarge:
+        case .missingToken, .uploadFileUnreadable, .unauthorized, .fileTooLarge, .emptyTranscript:
             return false
         }
     }

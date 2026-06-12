@@ -66,11 +66,22 @@ actor StreamingDictationSession {
         #endif
         segmentTasks[index] = Task {
             defer { try? FileManager.default.removeItem(at: segmentURL) }
-            let response = try await client.transcribe(
-                audioURL: segmentURL,
-                cleanupMode: .raw,
-                returnCleaned: false
-            )
+            let response: RemoteTranscriptionResponse
+            do {
+                response = try await client.transcribe(
+                    audioURL: segmentURL,
+                    cleanupMode: .raw,
+                    returnCleaned: false
+                )
+            } catch RemoteMacError.emptyTranscript {
+                // A silent segment (pause in dictation) is normal, not a
+                // failure; treating it as one would discard every streamed
+                // segment and re-transcribe the whole recording.
+                #if !SWIFT_PACKAGE
+                WLogger.transcription.info("Streaming upload empty (silence) index=\(index)")
+                #endif
+                return ""
+            }
             #if !SWIFT_PACKAGE
             WLogger.transcription.info("Streaming upload completed index=\(index) chars=\(response.text.count)")
             #endif

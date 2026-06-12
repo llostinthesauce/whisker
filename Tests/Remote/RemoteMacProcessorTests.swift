@@ -178,6 +178,57 @@ final class RemoteMacProcessorTests: XCTestCase {
         }
     }
 
+    func testRemoteClientDoesNotFallbackOnEmptyTranscript() async throws {
+        // 422 means the server transcribed the audio and found no speech.
+        // Re-uploading the same audio to the Tailscale endpoint would give
+        // the same answer, so the client must not fail over.
+        FallbackURLProtocol.setHandler { request in
+            guard let path = request.url?.path else {
+                throw RemoteMacError.invalidResponse
+            }
+            if path == "/v1/health" {
+                return (
+                    200,
+                    Data("""
+                    {
+                      "ok": true,
+                      "server": "whisker-server",
+                      "version": "0.1.0",
+                      "engine": "parakeet_mlx",
+                      "model": "mlx-community/parakeet-tdt-0.6b-v3",
+                      "cleanup": ["raw"],
+                      "max_duration_seconds": 300
+                    }
+                    """.utf8)
+                )
+            }
+            return (422, Data("{\"detail\": \"Empty transcript\"}".utf8))
+        }
+        let sessionConfiguration = URLSessionConfiguration.ephemeral
+        sessionConfiguration.protocolClasses = [FallbackURLProtocol.self]
+        let session = URLSession(configuration: sessionConfiguration)
+        let configuration = RemoteMacClientConfiguration(
+            baseURL: URL(string: "http://lan-whisker.test:8787")!,
+            fallbackBaseURL: URL(string: "https://whisker-tailnet.example.test")!,
+            bearerToken: "secret",
+            timeoutSeconds: 1
+        )
+        let audioURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("remote-client-empty-\(UUID().uuidString).caf")
+        try Data("audio".utf8).write(to: audioURL)
+        defer { try? FileManager.default.removeItem(at: audioURL) }
+
+        do {
+            _ = try await RemoteMacClient(configuration: configuration, session: session)
+                .transcribe(audioURL: audioURL, cleanupMode: .raw, returnCleaned: false)
+            XCTFail("Expected emptyTranscript")
+        } catch RemoteMacError.emptyTranscript {
+            XCTAssertFalse(FallbackURLProtocol.requestedHosts().contains("whisker-tailnet.example.test"))
+        } catch {
+            XCTFail("Expected emptyTranscript, got \(error)")
+        }
+    }
+
     func testRemoteClientPreflightsLocalBeforeTranscriptionFallback() async throws {
         FallbackURLProtocol.setHandler { request in
             guard let host = request.url?.host,

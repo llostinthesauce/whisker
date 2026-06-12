@@ -85,6 +85,48 @@ final class StreamingDictationSessionTests: XCTestCase {
         XCTAssertTrue(client.requested(contains: "full.caf"))
     }
 
+    func testSilentSegmentJoinsAsEmptyWithoutWholeFileFallback() async throws {
+        // A pause in dictation produces a silent segment, which the server
+        // reports as 422/emptyTranscript. That must not discard the streamed
+        // segments and re-transcribe the whole recording.
+        let client = SegmentStubClient(responses: [
+            "seg-0.caf": .success("before the pause"),
+            "seg-1.caf": .failure(RemoteMacError.emptyTranscript),
+            "seg-2.caf": .success("after the pause"),
+            "full.caf": .success("whole recording text")
+        ])
+        let session = StreamingDictationSession(
+            client: client,
+            cleanupMode: .raw,
+            fullRecordingURL: url("full.caf")
+        )
+        await session.ingest(segmentURL: url("seg-0.caf"), index: 0)
+        await session.ingest(segmentURL: url("seg-1.caf"), index: 1)
+        await session.ingest(segmentURL: url("seg-2.caf"), index: 2)
+
+        let result = try await session.finish(durationSeconds: 12)
+
+        XCTAssertEqual(result.rawTranscript.text, "before the pause after the pause")
+        XCTAssertFalse(client.requested(contains: "full.caf"))
+    }
+
+    func testAllSilentSegmentsFallBackToWholeFile() async throws {
+        let client = SegmentStubClient(responses: [
+            "seg-0.caf": .failure(RemoteMacError.emptyTranscript),
+            "full.caf": .success("recovered text")
+        ])
+        let session = StreamingDictationSession(
+            client: client,
+            cleanupMode: .raw,
+            fullRecordingURL: url("full.caf")
+        )
+        await session.ingest(segmentURL: url("seg-0.caf"), index: 0)
+
+        let result = try await session.finish(durationSeconds: 2)
+
+        XCTAssertEqual(result.rawTranscript.text, "recovered text")
+    }
+
     func testFallsBackToWholeFileWhenAllSegmentsEmpty() async throws {
         let client = SegmentStubClient(responses: [
             "seg-0.caf": .success("   "),

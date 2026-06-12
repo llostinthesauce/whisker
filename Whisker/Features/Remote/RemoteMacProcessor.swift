@@ -27,11 +27,16 @@ final class RemoteMacProcessor: DictationProcessor, @unchecked Sendable {
     }
 
     func process(audioURL: URL, durationSeconds: Double, cleanupMode: CleanupMode) async throws -> DictationResult {
-        let response = try await client.transcribe(
-            audioURL: audioURL,
-            cleanupMode: cleanupMode,
-            returnCleaned: cleanupMode != .raw
-        )
+        let response: RemoteTranscriptionResponse
+        do {
+            response = try await client.transcribe(
+                audioURL: audioURL,
+                cleanupMode: cleanupMode,
+                returnCleaned: cleanupMode != .raw
+            )
+        } catch RemoteMacError.emptyTranscript {
+            throw TranscriptionError.emptyTranscript
+        }
         let transcript = Transcript(
             text: response.text,
             durationSeconds: response.durationSeconds,
