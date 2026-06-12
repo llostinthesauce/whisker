@@ -9,7 +9,7 @@ class Qwen3ASR06BEngine:
     """Qwen3-ASR 0.6B 4-bit MLX ASR engine."""
 
     name = "qwen3-asr-06b"
-    model_name = "aufklarer/Qwen3-ASR-0.6B-MLX-4bit"
+    model_name = "mlx-community/Qwen3-ASR-0.6B-4bit"
 
     def __init__(
         self,

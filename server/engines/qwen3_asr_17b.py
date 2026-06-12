@@ -9,7 +9,7 @@ class Qwen3ASR17BEngine:
     """Qwen3-ASR 1.7B 8-bit MLX ASR engine."""
 
     name = "qwen3-asr-17b"
-    model_name = "aufklarer/Qwen3-ASR-1.7B-MLX-8bit"
+    model_name = "mlx-community/Qwen3-ASR-1.7B-8bit"
 
     def __init__(
         self,

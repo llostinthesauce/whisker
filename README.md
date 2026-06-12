@@ -149,7 +149,7 @@ Additional engines can be added as switchable profiles with
 Example:
 
 ```sh
-WHISKER_EXTRA_MODEL_PROFILES='[{"id":"qwen3-06b","label":"Qwen3-ASR 0.6B 4-bit","engine":"qwen3-asr-06b","model":"aufklarer/Qwen3-ASR-0.6B-MLX-4bit","speed":"medium","description":"Qwen3-ASR 0.6B 4-bit quantized."}]'
+WHISKER_EXTRA_MODEL_PROFILES='[{"id":"qwen3-06b","label":"Qwen3-ASR 0.6B 4-bit","engine":"qwen3-asr-06b","model":"mlx-community/Qwen3-ASR-0.6B-4bit","speed":"medium","description":"Qwen3-ASR 0.6B 4-bit quantized."}]'
 ```
 
 The app discovers profiles from `/v1/health`, remembers them between
