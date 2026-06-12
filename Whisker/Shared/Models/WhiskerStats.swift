@@ -1,6 +1,6 @@
 import Foundation
 
-public struct WhiskerStats {
+public struct WhiskerStats: Sendable {
     public let totalWords: Int
     public let transcriptionsToday: Int
     public let totalAudioSeconds: Double
@@ -10,7 +10,7 @@ public struct WhiskerStats {
     public let longestSessionSeconds: Double
     public let perEngineBreakdown: [(engine: String, count: Int, words: Int)]
 
-    public nonisolated(unsafe) static let empty = WhiskerStats(
+    public static let empty = WhiskerStats(
         totalWords: 0,
         transcriptionsToday: 0,
         totalAudioSeconds: 0,
